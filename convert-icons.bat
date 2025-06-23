@@ -1,5 +1,5 @@
 @echo off
-setlocal
+setlocal EnableDelayedExpansion
 
 REM === Set folder paths ===
 set "SVG_DIR=SVG"
@@ -27,21 +27,21 @@ exit /b
 
 :process
 REM === Generate PNG ===
-if exist "%PNG_DIR%\%baseName%.png" (
-    echo Skipping PNG for %baseName% (already exists)
+if exist "%PNG_DIR%\!baseName!.png" (
+    echo Skipping PNG for !baseName! (already exists)
 ) else (
-    echo Creating PNG for %baseName%...
-    "%INKSCAPE_PATH%" "%svgFile%" --export-type=png --export-width=1000 --export-height=1000 --export-filename="%PNG_DIR%\%baseName%.png"
+    echo Creating PNG for !baseName!...
+    "%INKSCAPE_PATH%" "!svgFile!" --export-type=png --export-width=1000 --export-height=1000 --export-filename="%PNG_DIR%\!baseName!.png"
 )
 
 REM === Generate ICO (via Inkscape to PNG, then convert to ICO) ===
-if exist "%ICO_DIR%\%baseName%.ico" (
-    echo Skipping ICO for %baseName% (already exists)
+if exist "%ICO_DIR%\!baseName!.ico" (
+    echo Skipping ICO for !baseName! (already exists)
 ) else (
-    echo Creating ICO for %baseName%...
-    "%INKSCAPE_PATH%" "%svgFile%" --export-type=png --export-width=256 --export-height=256 --export-filename="%ICO_DIR%\%baseName%-temp.png"
-    magick "%ICO_DIR%\%baseName%-temp.png" -define icon:auto-resize="256" "%ICO_DIR%\%baseName%.ico"
-    del "%ICO_DIR%\%baseName%-temp.png"
+    echo Creating ICO for !baseName!...
+    "%INKSCAPE_PATH%" "!svgFile!" --export-type=png --export-width=256 --export-height=256 --export-filename="%ICO_DIR%\!baseName!-temp.png"
+    magick "%ICO_DIR%\!baseName!-temp.png" -define icon:auto-resize="256" "%ICO_DIR%\!baseName!.ico"
+    del "%ICO_DIR%\!baseName!-temp.png"
 )
 
 exit /b
